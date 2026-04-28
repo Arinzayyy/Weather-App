@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Env — never commit
+.env
+.env.local
+.env.*.local
+**/.env
+!**/.env.example
+
+# Build output
+.next/
+out/
+dist/
+build/
+
+# SQLite database files
+*.sqlite
+*.sqlite3
+*.db
+backend/db/*.sqlite*
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
