@@ -5,6 +5,37 @@
 html, body, #__next {
   height: 100%;
 }
+
 body {
-  @apply bg-slate-50 text-slate-900 antialiased;
+  @apply antialiased;
+}
+
+/* Smooth gradient transitions when weather changes */
+.weather-bg {
+  transition: background 1.2s ease;
+  min-height: 100vh;
+}
+
+/* Glassmorphism card base */
+.glass {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* Slightly more opaque glass for forms/inputs */
+.glass-solid {
+  background: rgba(255, 255, 255, 0.20);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.30);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* Date input calendar icon color fix for glass inputs */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+  cursor: pointer;
 }

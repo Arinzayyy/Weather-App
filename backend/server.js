@@ -1,11 +1,12 @@
 // Entry point for the Express backend.
-// Loads .env from the project root (one level above /backend).
-require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
+// Loads .env from the backend directory.
+require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
 
-const weatherRoutes = require('./routes/weather');
+const weatherRoutes  = require('./routes/weather');
+const youtubeRoutes  = require('./routes/youtube');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -26,6 +27,9 @@ app.get('/api/health', (req, res) => {
 
 // Mount CRUD + export routes at /api/weather.
 app.use('/api/weather', weatherRoutes);
+
+// Mount YouTube search route at /api/youtube.
+app.use('/api/youtube', youtubeRoutes);
 
 // 404 for anything that didn't match.
 app.use((req, res) => {

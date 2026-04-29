@@ -27,6 +27,13 @@ async function request(path, options = {}) {
   return body;
 }
 
+// Autocomplete suggestions for the search bar dropdown (partial queries OK).
+// Returns [] instead of throwing when nothing matches.
+export async function fetchAutocomplete(q) {
+  const body = await request('/api/weather/autocomplete?q=' + encodeURIComponent(q));
+  return (body && body.suggestions) || [];
+}
+
 // Resolve a free-text query to up to 5 candidate matches. Frontend uses this
 // to render a disambiguation picker when the input is ambiguous.
 export async function geocodeLocation(location) {
@@ -45,6 +52,11 @@ export function saveRecord({ location, dateFrom, dateTo }) {
     method: 'POST',
     body: JSON.stringify({ location, dateFrom, dateTo }),
   });
+}
+
+// YouTube videos for a location.
+export function fetchYouTubeVideos(location) {
+  return request('/api/youtube?location=' + encodeURIComponent(location));
 }
 
 // CRUD on saved records.

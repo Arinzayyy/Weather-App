@@ -77,6 +77,34 @@ router.get('/', (req, res, next) => {
   }
 });
 
+// ---- AUTOCOMPLETE ----
+// GET /api/weather/autocomplete?q=San+Fra
+// Lightweight endpoint for the search bar dropdown. Returns an empty array
+// instead of 404 so partial mid-typing queries don't produce error noise.
+// Mounted BEFORE /:id so "autocomplete" is not interpreted as an id.
+router.get('/autocomplete', async (req, res, next) => {
+  try {
+    const q = typeof req.query.q === 'string' ? req.query.q.trim() : '';
+    if (q.length < 2) return res.json({ suggestions: [] });
+    let matches = [];
+    try {
+      matches = await owm.geocodeMany(q, 5);
+    } catch (err) {
+      // 404 = nothing found — return empty, not an error
+      if (err.statusCode === 404) return res.json({ suggestions: [] });
+      throw err;
+    }
+    const suggestions = matches.map(m => ({
+      label: [m.name, m.state, m.country].filter(Boolean).join(', '),
+      lat: m.lat,
+      lon: m.lon,
+    }));
+    res.json({ suggestions });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // ---- GEOCODE (disambiguation) ----
 // GET /api/weather/geocode?location=Springfield
 // Returns up to 5 candidate matches so the frontend can render a picker
