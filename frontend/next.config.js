@@ -17,7 +17,6 @@ const nextConfig = {
   // Re-export the NEXT_PUBLIC_* vars loaded above so Next inlines them at build time.
   env: {
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
-    NEXT_PUBLIC_GOOGLE_MAPS_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY,
   },
 };
 

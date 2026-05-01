@@ -1,79 +1,82 @@
-# Build Status — Weather App
+# Build Status — WeatherApp
 
 > Snapshot of progress on the PM Accelerator AI Engineer Intern technical assessment (Full-stack / Dual Role).
 > Built by **Arinze Ohaemesi**.
-> Email received: **April 21, 2026** · Submission deadline: **May 1, 2026** (10 days, dual role).
+> Email received: **April 21, 2026** · Submission deadline: **May 1, 2026**
 
 ---
 
 ## What's done
 
 ### Frontend (Assessment 1)
-- [x] Next.js 16 (Pages Router) + Tailwind CSS scaffold
-- [x] Location input — accepts city, "City, ST", zip code, GPS coordinates ("lat,lon"), and the user's browser geolocation
-- [x] Current weather display — temp (°F + °C with toggle), feels like, humidity, wind, condition icon
-- [x] 5-day forecast — daily cards grouped from OWM's 3-hour intervals, timezone-aware
-- [x] **Map** — Leaflet + OpenStreetMap tiles, marker with popup (location + temp), auto-recenters on new searches, SSR-skipped via `next/dynamic`
-- [x] Unit toggle (F/C) with `localStorage` persistence
-- [x] **Disambiguation picker** — when a query matches multiple places (e.g. "Springfield"), user picks which one
-- [x] CRUD UI — save form (location + dateFrom + dateTo), saved-records list with Edit / Delete
-- [x] Export bar — JSON / CSV / PDF / XML / Markdown download links
+- [x] Next.js (Pages Router) + Tailwind CSS
+- [x] **Autocomplete search** — debounced (300ms), keyboard navigable (arrows/enter/esc), outside-click to close, full ARIA (listbox/option/activedescendant). Calls backend `/api/weather/autocomplete` — API key stays server-side
+- [x] Location input — city, "City, ST", zip code, GPS coordinates, browser geolocation
+- [x] Current weather card — temp (°F/°C), feels like, humidity, wind, 4x icon with glow
+- [x] 5-day forecast — daily cards from OWM 3-hour intervals, timezone-aware, horizontal scroll on mobile
+- [x] **Interactive map** — Leaflet + OpenStreetMap, marker + popup, SSR-skipped via `next/dynamic`
+- [x] Unit toggle (°F / °C) with localStorage persistence
+- [x] CRUD UI — save form, saved-records list with Edit / Delete
+- [x] Export bar — JSON / CSV / PDF / XML / Markdown
+- [x] **YouTube sidebar** — 2 weather/conditions + 1 local events video per search; thumbnail-click-to-embed; server-side API key proxy
+- [x] **Dynamic gradient backgrounds** — keyed to OWM condition ID + day/night, 1.2s CSS transition
+- [x] **Glassmorphism UI** — `backdrop-blur-xl`, `bg-white/15`, `border-white/25` across all cards
+- [x] **Responsive layout** — two-column grid (`lg:grid-cols-[1fr_360px]`) collapses to single column on mobile; tested at 375/768/1280px
+- [x] Disambiguation screen removed — autocomplete handles location selection upstream
 - [x] Error handling — invalid input, network failure, geolocation denied, location not found, API key invalid
-- [x] Use-my-location button (browser Geolocation API)
 - [x] Footer with builder name + PM Accelerator description
 
 ### Backend (Assessment 2)
-- [x] Express server with CORS, JSON body parsing, centralized error handler
-- [x] SQLite via better-sqlite3 — `weather_searches` table (id, location, date_from, date_to, temperature_data JSON, created_at, updated_at)
-- [x] **OpenWeatherMap service wrapper** — geocoding-first strategy:
-  - Coords → used directly
-  - Zip codes → `/geo/1.0/zip`
-  - Free-text place → `/geo/1.0/direct` (with smart "City, ST" → "City,ST,US" normalization)
-- [x] CRUD endpoints — `POST/GET/PUT/DELETE /api/weather`, `GET /api/weather/:id`
-- [x] `GET /api/weather/current` — lookup without saving
-- [x] `GET /api/weather/geocode` — disambiguation candidates
-- [x] `GET /api/weather/export?format=…` — five export formats (JSON, CSV, PDF, XML, Markdown)
-- [x] Date range validation — both required, ordered correctly, within 5 days of today
-- [x] Re-fetches fresh weather snapshot on every save / update
-- [x] `GET /api/health` — lightweight uptime + key-presence check
+- [x] Express + CORS + JSON body parsing + centralized error handler
+- [x] SQLite via better-sqlite3 — `weather_searches` table with full CRUD
+- [x] OpenWeatherMap service wrapper — geocoding-first strategy (coords → zip → free-text with "City,ST,US" normalization)
+- [x] `GET /api/weather/autocomplete?q=` — returns `[]` instead of 404 for no-match (safe for mid-typing calls)
+- [x] `GET /api/weather/geocode?location=` — disambiguation candidates (up to 5)
+- [x] `GET /api/weather/current?location=` — lookup without saving
+- [x] `POST/GET/PUT/DELETE /api/weather` — full CRUD
+- [x] `GET /api/weather/export?format=` — JSON, CSV, PDF, XML, Markdown
+- [x] `GET /api/youtube?location=` — parallel search: 2 weather + 1 events video
+- [x] `GET /api/health` — uptime + key-presence check
+- [x] Date range validation, fresh snapshot on every save/update
+- [x] RESTful design — idempotent methods, correct HTTP status codes, JSON error objects
+
+### Documentation
+- [x] **WeatherApp_PRD.docx** — 7-section Product Requirements Document: 3 personas, 12 user stories with acceptance criteria, feature requirements table, non-functional requirements, open questions
+- [x] **WeatherApp_PDR.docx** — 12-section Product Design Review
+- [x] **README.md** — opens with user personas table, full feature tour, API endpoint table, project structure, env-var reference
 
 ---
 
 ## What's left
 
-### Code
-- [ ] **Step 11 — Responsive pass** at 375 / 768 / 1280 breakpoints. Spot-fix any layout issues at mobile/tablet sizes.
-- [ ] **Step 13 — README polish.** Current README covers setup + structure but should be expanded: feature tour, screenshots, architecture diagram, env-var reference table, deployment notes.
-
-### Submission (must-do, not yet done)
-- [ ] Push to **GitHub** at https://github.com/Arinzayyy/Weather-App (this push)
-- [ ] Add `community@pmaccelerator.io` and `hr@pmaccelerator.io` as collaborators with view access
-- [ ] **Record demo video** (~10–15 min walkthrough — search, save, edit, delete, export, picker, map, geolocation, error states)
-- [ ] **Submit Google Form** with repo URL + video link (link is in the assessment email)
-- [ ] **Reply to PMA email** with Section 1 + Section 2 answers:
-  - Section 1: technical project pride point + difficulty encountered; goal for joining program
-  - Section 2: cohort commitment (Cohort 9: Jun 22–Aug 14, 2026 | Cohort 10: Aug 17–Oct 9, 2026), 10–20 hr/wk yes/no, role applying for, college info, OPT/CPT status
+### Submission (must-do before May 1)
+- [ ] **Push to GitHub** — `git remote add origin https://github.com/Arinzayyy/Weather-App.git && git push -u origin main` (blocked by stale .git lock files — remove with `Remove-Item -Force ".git\index.lock"` and `.git\config.lock"`)
+- [ ] **Add GitHub collaborators** — Settings → Collaborators → add `community@pmaccelerator.io` and `hr@pmaccelerator.io` (Read access)
+- [ ] **Record demo video** — 10–15 min walkthrough framed around Jordan Rivera (travel coordinator) use case per Pierre's engineering mindset feedback
+- [ ] **Submit Google Form** — repo URL + video link (link in assessment email)
+- [ ] **Reply to Simi's email** — Section 1 (technical pride point, difficulty, program goal) + Section 2 (cohort, hours, role, college, OPT/CPT)
+- [x] ~~**Add YouTube API key**~~ — already present in `backend/.env`
 
 ---
 
-## Timeline (working back from May 1 deadline)
+## Mentor Feedback Applied (Pierre-Andre Malbrough — April 28, 2026)
 
-| Day | Plan |
+Pierre's core note: features need user stories. Every feature must solve a specific user's problem.
+
+| Pierre's Feedback | Action Taken |
 |---|---|
-| Mon Apr 27 *(today)* | Disambiguation done · push to GitHub · invite collaborators · Step 11 responsive pass |
-| Tue Apr 28 | Step 13 README polish · end-to-end QA |
-| Wed Apr 29 | Record demo video · draft email reply |
-| Thu Apr 30 | **Submit Google Form · send email reply** |
-| Fri May 1 | Buffer / hard deadline |
+| "Start with user stories, then build a PRD" | Created `WeatherApp_PRD.docx` with 3 personas + 12 user stories + acceptance criteria |
+| "Autocomplete is a standard feature that's missing" | Implemented debounced autocomplete with full keyboard nav and ARIA |
+| "Frame demo around a specific user's scenario" | Demo script to open with Jordan Rivera (travel coordinator) scenario |
+| "Technology must make a specific user's life easier" | Removed generic travel videos — YouTube now fetches weather + local events (maps to US-09, Marcus the event planner) |
+| "Disambiguation screen shows same city 3 times" | Removed — autocomplete handles location selection before search |
 
 ---
 
-## Local run
-
-See `README.md` for setup. TL;DR:
+## Local Run
 
 ```bash
-cp .env.example .env       # fill in OPENWEATHER_API_KEY
+cp .env.example .env       # fill in OPENWEATHER_API_KEY + YOUTUBE_API_KEY
 cd backend && npm install && npm run dev   # http://localhost:4000
 cd frontend && npm install && npm run dev  # http://localhost:3000
 ```
