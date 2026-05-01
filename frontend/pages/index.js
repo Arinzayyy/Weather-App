@@ -7,6 +7,7 @@ import UnitToggle from '../components/UnitToggle';
 import SaveForm from '../components/SaveForm';
 import SavedRecords from '../components/SavedRecords';
 import YouTubePanel from '../components/YouTubePanel';
+import RecentSearches from '../components/RecentSearches';
 import {
   fetchCurrentWeather,
   fetchYouTubeVideos,
@@ -53,6 +54,10 @@ export default function Home() {
   const [ytError, setYtError] = useState('');
   const [ytLocation, setYtLocation] = useState('');
 
+  // Recent searches (US-18) — persisted to localStorage so Sam doesn't have
+  // to retype a place she searched 30 seconds ago. De-duplicated, max 5.
+  const [recents, setRecents] = useState([]);
+
   useEffect(() => {
     try {
       const saved = typeof window !== 'undefined' ? window.localStorage.getItem('weather.unit') : null;
@@ -64,6 +69,29 @@ export default function Home() {
       if (typeof window !== 'undefined') window.localStorage.setItem('weather.unit', unit);
     } catch (_) {}
   }, [unit]);
+
+  useEffect(() => {
+    try {
+      if (typeof window === 'undefined') return;
+      const raw = window.localStorage.getItem('weather.recents');
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) setRecents(parsed.filter((s) => typeof s === 'string').slice(0, 5));
+    } catch (_) {}
+  }, []);
+
+  function pushRecent(label) {
+    if (!label) return;
+    setRecents((prev) => {
+      const next = [label, ...prev.filter((s) => s !== label)].slice(0, 5);
+      try {
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem('weather.recents', JSON.stringify(next));
+        }
+      } catch (_) {}
+      return next;
+    });
+  }
 
   const refreshRecords = useCallback(async () => {
     try { setRecords(await listRecords()); }
@@ -101,6 +129,7 @@ export default function Home() {
       // Build the display label from the resolved location returned by the backend
       const loc = snapshot.location || {};
       const label = [loc.resolvedName, loc.state, loc.country].filter(Boolean).join(', ') || location;
+      pushRecent(label);
       loadYouTubeVideos(label);
     } catch (err) {
       setError(err.message || 'Unable to fetch weather data. Please check your connection.');
@@ -160,6 +189,11 @@ export default function Home() {
         {/* ── Search row — stacks on mobile, side-by-side on sm+ ── */}
         <div className="max-w-2xl mx-auto w-full flex flex-col gap-2">
           <SearchBar onSearch={handleSearch} isLoading={isLoading} />
+          <RecentSearches
+            items={recents}
+            onSelect={(label) => handleSearch(label)}
+            disabled={isLoading}
+          />
           <div className="flex justify-end">
             <UnitToggle unit={unit} onChange={setUnit} />
           </div>

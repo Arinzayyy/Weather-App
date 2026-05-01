@@ -1,3 +1,5 @@
+import OutdoorOutlook from './OutdoorOutlook';
+
 function fToC(f) { return (f - 32) * 5 / 9; }
 function round(n) {
   if (n == null || Number.isNaN(n)) return '—';
@@ -16,6 +18,7 @@ export default function WeatherCard({ data, unit }) {
   const iconUrl  = weather.icon
     ? 'https://openweathermap.org/img/wn/' + weather.icon + '@4x.png'
     : null;
+  const weatherId = typeof weather.id === 'number' ? weather.id : null;
 
   const resolvedName = (location && location.resolvedName) || current.name || '';
   const state        = (location && location.state) || '';
@@ -61,6 +64,18 @@ export default function WeatherCard({ data, unit }) {
         <span className="text-white/50 text-lg sm:text-xl">
           {round(secondaryTemp)}{secondaryUnit}
         </span>
+      </div>
+
+      {/* Outdoor outlook (US-19) — interprets the data into a recommendation
+          for Marcus the event planner. */}
+      <div className="mt-3">
+        <OutdoorOutlook
+          weatherId={weatherId}
+          tempF={tempF}
+          windMph={windMph}
+          humidity={humidity}
+          description={weather.description || weather.main}
+        />
       </div>
 
       {/* Stats row */}
