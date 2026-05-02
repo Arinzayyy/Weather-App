@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-# WeatherApp — PM Accelerator AI Engineer Intern Assessment
-
-Full-stack weather platform built by **Arinze Ohaemesi** for the PM Accelerator AI Engineer Intern technical assessment (April 2026). Covers **Assessment 1 (Frontend)** and **Assessment 2 (Backend)** as a unified full-stack submission.
-
-=======
 # Weather App
 
 A user-centric weather application built around three real personas — an event planner, a travel consultant, and a field-services dispatcher — by **Arinze Ohaemesi** for the Product Manager Accelerator AI Engineer Intern technical assessment (April 2026). Covers **Assessment 1 (Frontend)** and **Assessment 2 (Backend)** as a full-stack submission.
@@ -32,81 +26,20 @@ Each feature here is implemented in service of at least one user story. The stor
 | Real-time autocomplete (debounced, keyboard-navigable) | Sam | [US-02](./USER_STORIES.md#us-02--real-time-autocomplete) |
 | Search by city / `City, ST` / `City, Country` / US zip / `lat,lon` | All | [US-03](./USER_STORIES.md#us-03--flexible-search) |
 | Disambiguation by state-in-resolved-name | Sam | [US-04](./USER_STORIES.md#us-04--disambiguation) |
-| Recent-searches chip row, persisted to localStorage | Sam | [US-18](./USER_STORIES.md#us-18--recent-searches-sam) |
 | Current conditions card | Marcus | [US-05](./USER_STORIES.md#us-05--current-weather-snapshot) |
 | °F / °C toggle that persists across reloads | Priya | [US-06](./USER_STORIES.md#us-06--temperature-unit-toggle) |
 | 5-day forecast bucketed by city-local timezone | Marcus | [US-07](./USER_STORIES.md#us-07--5-day-forecast) |
 | Glanceable weather-themed background gradient (day/night aware) | Sam | [US-08](./USER_STORIES.md#us-08--glanceable-theme) |
-| "Outdoor outlook" recommendation badge | Marcus | [US-19](./USER_STORIES.md#us-19--outdoor-outlook-badge-marcus) |
 | Leaflet + OpenStreetMap embed (no API key) | Marcus | [US-09](./USER_STORIES.md#us-09--map-of-the-venue) |
 | Local-scene videos panel (YouTube Data API, server-side key) | Marcus | [US-10](./USER_STORIES.md#us-10--local-scene-videos) |
 | Save trip with location + date range | Priya | [US-11](./USER_STORIES.md#us-11--save-a-trip) |
 | Edit / delete / list saved trips | Priya | [US-12](./USER_STORIES.md#us-12--edit-a-saved-trip) – [US-14](./USER_STORIES.md#us-14--list-saved-trips) |
 | Export saved trips as JSON / CSV / PDF / XML / Markdown | Priya | [US-15](./USER_STORIES.md#us-15--export-to-pdf) – [US-17](./USER_STORIES.md#us-17--export-to-json--xml--markdown) |
 
->>>>>>> 8c7187a1d06c0d8339cbc76311e86b34d628600c
 ---
 
-## Who This Is For
+## Tech stack
 
-<<<<<<< HEAD
-This application was designed around three specific user personas, each with documented needs:
-
-| Persona | Role | Primary Need |
-|---|---|---|
-| **Maya Chen** | Climate Data Analyst | Export structured weather data for Python/Excel analysis |
-| **Jordan Rivera** | Corporate Travel Coordinator | Quickly confirm destinations with autocomplete + 5-day forecast |
-| **Marcus Thompson** | Outdoor Event Planner | Understand venue climate character + save records for proposals |
-
-Full user stories and acceptance criteria are documented in [`WeatherApp_PRD.docx`](./WeatherApp_PRD.docx).
-
----
-
-## Features
-
-**Search & Discovery**
-- Autocomplete suggestions as you type (debounced, keyboard navigable, full ARIA support)
-- Searches resolve via OpenWeatherMap Geocoding API — city names, zip codes, or GPS coordinates all work
-- Dynamic gradient backgrounds that change based on weather condition and time of day
-
-**Current Conditions**
-- Temperature display with live °F / °C toggle (client-side conversion, no re-fetch)
-- Feels like, humidity, wind speed
-- High-resolution weather icons with glow effect
-
-**5-Day Forecast**
-- Daily high/low with weather icons and condition descriptions
-- Horizontal scroll on mobile, 5-column grid on desktop
-
-**Interactive Map**
-- Leaflet + OpenStreetMap (no API key required)
-- Centered on result coordinates with a marker popup showing city and conditions
-
-**Weather & Local Scene Sidebar**
-- YouTube Data API v3 integration (server-side proxy — API key never exposed to browser)
-- 2 weather/conditions videos + 1 local events video per search
-- Click any thumbnail to play inline; clears on new search
-
-**Saved Records (full CRUD)**
-- Save any search with a custom date range
-- Edit or delete individual records
-- Export all records as JSON, CSV, PDF, XML, or Markdown
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Frontend | Next.js 15 (Pages Router), React 18, Tailwind CSS 3 |
-| Backend | Node.js, Express 4 |
-| Database | SQLite via better-sqlite3 (synchronous, file-based) |
-| Weather Data | OpenWeatherMap — Geocoding, Current Weather, 5-day Forecast APIs |
-| Maps | Leaflet + OpenStreetMap (SSR-skipped via next/dynamic) |
-| Video | YouTube Data API v3 (server-side proxy) |
-| PDF Export | PDFKit |
-| CSV Export | json2csv |
-=======
 - **Frontend** — Next.js 16 (Pages Router), React 18, Tailwind CSS, Leaflet + react-leaflet
 - **Backend** — Node.js + Express, axios for upstream HTTP, better-sqlite3 for storage
 - **Database** — SQLite (single file, zero infra)
@@ -131,8 +64,6 @@ Full user stories and acceptance criteria are documented in [`WeatherApp_PRD.doc
 │  - SaveForm            │        │                          │
 │  - SavedRecords        │        └──────────────────────────┘
 │  - YouTubePanel        │
-│  - RecentSearches      │
-│  - OutdoorOutlook      │
 └────────────────────────┘
 ```
 
@@ -140,7 +71,6 @@ Two design choices worth highlighting; both written up in detail in [PRD.md § 8
 
 1. **Backend-first proxy.** All third-party API calls go through Express, never directly from the browser. Keeps API keys server-side, lets the backend normalise responses, and lets us swap providers without touching the client.
 2. **Geocoding-first weather lookups.** Every query is resolved to coordinates via OWM's geocoding API *before* the weather endpoints are called. Eliminates the "Hayward, CA" 404 class of bug (where OWM treats `CA` as Canada at the weather endpoint) and lets the resolved place name carry US state info into the UI.
->>>>>>> 8c7187a1d06c0d8339cbc76311e86b34d628600c
 
 ---
 
@@ -148,10 +78,6 @@ Two design choices worth highlighting; both written up in detail in [PRD.md § 8
 
 - Node.js 18+
 - npm 9+
-<<<<<<< HEAD
-- OpenWeatherMap API key — free at [openweathermap.org/api](https://openweathermap.org/api) (activation can take up to 2 hours)
-- YouTube Data API v3 key — free at [console.cloud.google.com](https://console.cloud.google.com) (enable YouTube Data API v3)
-=======
 - An OpenWeatherMap API key (free tier — activation takes up to 2 hours)
 - A YouTube Data API v3 key (free quota; required for the local-scene videos panel)
 
@@ -204,22 +130,25 @@ npm run dev
 ## Project structure
 
 ```
-weather-app/
+WeatherApp/
 ├── .env.example           # Template — copy to .env and fill in keys
 ├── .gitignore
 ├── README.md              # ← you are here
 ├── USER_STORIES.md        # Personas + 19 stories with acceptance criteria
 ├── PRD.md                 # PRD built from the user stories
-├── VIDEO_SCRIPT.md        # Demo-video walkthrough script
+├── WeatherApp_PRD.docx    # Formal Product Requirements Document
+├── WeatherApp_PDR.docx    # Product Design Review
+├── WeatherApp_Requirements.docx  # First-time setup & dependency reference
 ├── backend/               # Express + SQLite
 │   ├── server.js          # Entry point
 │   ├── routes/
-│   │   ├── weather.js     # CRUD + export + geocode endpoints
+│   │   ├── weather.js     # CRUD + export + autocomplete + geocode endpoints
 │   │   └── youtube.js     # Local-scene videos
 │   ├── services/
 │   │   └── openweather.js # Geocoding-first OWM client
 │   ├── utils/
-│   │   └── exporters.js   # JSON / CSV / PDF / XML / MD
+│   │   ├── exporters.js   # JSON / CSV / PDF / XML / MD
+│   │   └── validators.js  # Input validation
 │   └── db/
 │       └── database.js    # SQLite schema + helpers
 └── frontend/              # Next.js + Tailwind
@@ -227,22 +156,19 @@ weather-app/
     │   ├── _app.js
     │   └── index.js       # Main weather UI
     ├── components/
-    │   ├── SearchBar.js
-    │   ├── WeatherCard.js
-    │   ├── OutdoorOutlook.js
-    │   ├── ForecastRow.js
-    │   ├── MapEmbed.js
-    │   ├── LeafletMap.js
-    │   ├── UnitToggle.js
-    │   ├── SaveForm.js
-    │   ├── SavedRecords.js
-    │   ├── YouTubePanel.js
-    │   └── RecentSearches.js
+    │   ├── SearchBar.js   # Debounced autocomplete search input
+    │   ├── WeatherCard.js # Current conditions card
+    │   ├── ForecastRow.js # 5-day forecast
+    │   ├── MapEmbed.js    # Leaflet map wrapper
+    │   ├── YouTubePanel.js # Weather + events video sidebar
+    │   ├── SaveForm.js    # Save/edit record form
+    │   ├── SavedRecords.js # Records list + export buttons
+    │   └── UnitToggle.js  # °F / °C toggle
     ├── lib/
-    │   ├── api.js
-    │   └── geolocation.js
+    │   ├── api.js         # Fetch wrappers for all backend endpoints
+    │   └── geolocation.js # Browser geolocation helper
     └── styles/
-        └── globals.css
+        └── globals.css    # Glassmorphism utilities, weather-bg transition
 ```
 
 ---
@@ -265,138 +191,17 @@ Full table in [PRD.md § 10](./PRD.md#10-api-surface). Highlights:
 
 ## Engineering decisions
 
-A few choices that came out of the design process and are worth a closer look:
-
 - **[Why a backend proxy at all?](./PRD.md#8-technical-architecture)** — keys, normalisation, provider portability.
 - **[Why geocode every query first?](./PRD.md#f-1--search-bar-with-autocomplete-and-geolocation)** — fixes the long tail of OWM weather-endpoint 404s and lets the UI surface US state automatically.
 - **[Why Leaflet over Google Maps Embed?](./PRD.md#f-5--map-embed)** — no API key, no demo-time quota, and a more honest demo of frontend skill (`useMap` hook, custom icon URLs, recenter logic).
 - **[Why snapshot weather at save time?](./PRD.md#f-7--saved-trips-with-crud)** — saved trips remain meaningful even if upstream APIs change or rotate schemas.
-- **[Why no disambiguation modal in the end?](./PRD.md#13-open-questions)** — state-in-resolved-name handles the long tail in zero modal steps; the picker UI is logged as a v2 future item.
-
----
-
-## Status
-
-This branch is the assessment submission as of **April 29, 2026**. The companion [PRD.md § 16 Changelog](./PRD.md#16-changelog) tracks substantive iterations.
+- **[Why no disambiguation modal?](./PRD.md#13-open-questions)** — state-in-resolved-name handles the long tail in zero modal steps; the picker UI is logged as a v2 future item.
 
 ---
 
 ## About PM Accelerator
 
 Product Manager Accelerator (PM Accelerator) is a career accelerator program that helps aspiring product managers and AI engineers break into top tech companies through mentorship, hands-on projects, and interview prep. This project was built as part of the PMA AI Engineer Intern technical assessment.
->>>>>>> 8c7187a1d06c0d8339cbc76311e86b34d628600c
-
----
-
-## Setup
-
-```bash
-# 1. Copy the env template and fill in your API keys
-cp .env.example .env
-# Edit .env — add OPENWEATHER_API_KEY and YOUTUBE_API_KEY
-
-# 2. Install backend dependencies
-cd backend && npm install
-
-# 3. Install frontend dependencies
-cd ../frontend && npm install
-```
-
----
-
-## Running Locally
-
-Two terminals required:
-
-```bash
-# Terminal 1 — backend (http://localhost:4000)
-cd backend
-npm run dev
-
-# Terminal 2 — frontend (http://localhost:3000)
-cd frontend
-npm run dev
-```
-
-Then open [http://localhost:3000](http://localhost:3000).
-
----
-
-## Environment Variables
-
-All keys live in a single `.env` file inside `/backend`. Copy `.env.example` as a starting point.
-
-| Variable | Required | Description |
-|---|---|---|
-| `OPENWEATHER_API_KEY` | Yes | OpenWeatherMap API key |
-| `YOUTUBE_API_KEY` | Yes | YouTube Data API v3 key |
-| `PORT` | No | Backend port (default: 4000) |
-| `DATABASE_PATH` | No | SQLite file path (default: ./db/weather.sqlite) |
-| `FRONTEND_ORIGIN` | No | CORS origin for the frontend (default: http://localhost:3000) |
-
----
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/weather/autocomplete?q=` | Location suggestions for search dropdown |
-| GET | `/api/weather/geocode?location=` | Full geocoding with disambiguation |
-| GET | `/api/weather/current?location=` | Current weather + 5-day forecast snapshot |
-| POST | `/api/weather` | Save a weather record |
-| GET | `/api/weather` | List all saved records |
-| PUT | `/api/weather/:id` | Update a saved record |
-| DELETE | `/api/weather/:id` | Delete a saved record |
-| GET | `/api/weather/export?format=` | Export records (json, csv, pdf, xml, md) |
-| GET | `/api/youtube?location=` | Weather + events videos for a location |
-
----
-
-## Project Structure
-
-```
-WeatherApp/
-├── .env.example                # Copy to .env and add your keys
-├── .gitignore
-├── README.md
-├── WeatherApp_PRD.docx         # Product Requirements Document
-├── WeatherApp_PDR.docx         # Product Design Review
-├── backend/
-│   ├── server.js               # Express entry point + middleware
-│   ├── routes/
-│   │   ├── weather.js          # CRUD, autocomplete, geocode, export
-│   │   └── youtube.js          # YouTube API proxy
-│   ├── services/
-│   │   └── openweather.js      # OWM API wrapper (geocoding, weather, forecast)
-│   ├── db/
-│   │   └── database.js         # SQLite schema + connection
-│   └── utils/
-│       ├── exporters.js        # JSON, CSV, PDF, XML, MD export logic
-│       └── validators.js       # Input validation
-└── frontend/
-    ├── pages/
-    │   └── index.js            # Main page — search, weather, CRUD
-    ├── components/
-    │   ├── SearchBar.js        # Debounced autocomplete search input
-    │   ├── WeatherCard.js      # Current conditions card
-    │   ├── ForecastRow.js      # 5-day forecast
-    │   ├── MapEmbed.js         # Leaflet map wrapper
-    │   ├── YouTubePanel.js     # Weather + events video sidebar
-    │   ├── SaveForm.js         # Save/edit record form
-    │   ├── SavedRecords.js     # Records list + export buttons
-    │   └── UnitToggle.js       # °F / °C toggle
-    ├── lib/
-    │   ├── api.js              # Fetch wrappers for all backend endpoints
-    │   └── geolocation.js      # Browser geolocation helper
-    └── styles/
-        └── globals.css         # Glassmorphism utilities, weather-bg transition
-```
-
----
-
-## About PM Accelerator
-
-[Product Manager Accelerator](https://www.pmaccelerator.io) is a career accelerator program helping aspiring PMs and AI engineers break into top tech companies through mentorship, hands-on projects, and interview preparation.
 
 ---
 
